@@ -1,6 +1,4 @@
-
-export default class html {
-registerMail:string = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,16 +26,16 @@ registerMail:string = `<!DOCTYPE html>
                                         </tr>
                                         <tr>
                                             <td class="esd-block-text es-m-txt-c" align="center">
-                                                <h2>Hey there!<br></h2>
+                                                <h2>Hey there {{newUser}}!<br></h2>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td class="esd-block-text es-m-txt-c es-p15t" align="center">
-                                                <p>We received a request to set your email to hello@name.com. If this is correct, please confirm by clicking the button below. If you don’t know why you got this email, please tell us straight away so we can fix this for you.</p>
+                                                <p>Confirm registration by clicking on the link below.</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="esd-block-button es-p20t es-p15b es-p10r es-p10l" align="center"><span class="es-button-border"><a href="https://viewstripo.email/" class="es-button" target="_blank">Confirm Email</a></span></td>
+                                            <td class="esd-block-button es-p20t es-p15b es-p10r es-p10l" align="center"><span class="es-button-border"><a href="localhost:3000/api/confirmRegistration?token={{token}}" class="es-button" target="_blank">Confirm Email</a></span></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -54,4 +52,4 @@ registerMail:string = `<!DOCTYPE html>
     </tbody>
 </table>
 </body>
-</html>`}
+</html>

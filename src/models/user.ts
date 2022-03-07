@@ -1,18 +1,5 @@
 import mongoose, {Schema} from "mongoose";
 
-// export interface UserDocument extends mongoose.Document{
-//     name: string;
-//     password: string;
-//     email: string;
-//     age: string;
-//     role: string;
-//     isVerified:boolean;
-//     createdAt: Date;
-//     updatedAt: Date;
-//
-// }
-
-
 const UserSchema = new mongoose.Schema({
     name: {
         type:String,
@@ -21,7 +8,8 @@ const UserSchema = new mongoose.Schema({
     password: {
         type:String,
         required:true,
-        minLength:6
+        minLength:6,
+        select: false
     },
     email: {
         type:String,
@@ -41,6 +29,13 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    token: {
+        type:String,
+    },
+    enrolled:{
+        type:[String],
+        default:[]
+    }
 
 },
     {timestamps:true}

@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const default_1 = __importDefault(require("../../config/default"));
 require('dotenv').config();
+require("dotenv/config");
 function connect() {
     const dbUrl = default_1.default.dbUrl;
     return mongoose_1.default.connect(dbUrl)

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import config from "../../config/default"
 require('dotenv').config();
+import 'dotenv/config'
 
 function connect(){
     const dbUrl: any = config.dbUrl;
