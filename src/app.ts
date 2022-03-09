@@ -3,6 +3,7 @@ import config from  "../config/default";
 import connect from "./db/connect"
 import auth from "./routes/auth"
 import user from "./routes/user"
+import Class from "./routes/class"
 import 'dotenv/config'
 import path from "path";
 
@@ -27,4 +28,7 @@ app.listen(port, host, () => {
 
     // user routes
     user(app)
+
+    // class routes "Class uppercase is on purpose"
+    Class(app)
 })

@@ -8,6 +8,7 @@ const default_1 = __importDefault(require("../config/default"));
 const connect_1 = __importDefault(require("./db/connect"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const user_1 = __importDefault(require("./routes/user"));
+const class_1 = __importDefault(require("./routes/class"));
 require("dotenv/config");
 const path_1 = __importDefault(require("path"));
 const port = default_1.default.port;
@@ -25,5 +26,7 @@ app.listen(port, host, () => {
     (0, auth_1.default)(app);
     // user routes
     (0, user_1.default)(app);
+    // class routes "Class uppercase is on purpose"
+    (0, class_1.default)(app);
 });
 //# sourceMappingURL=app.js.map

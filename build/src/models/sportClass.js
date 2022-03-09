@@ -20,40 +20,43 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const ClassSchema = new mongoose_1.default.Schema({
-    name: {
+const TerminSchema = new mongoose_1.default.Schema({
+    sport: {
         type: String,
         required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        minLength: 6,
-        select: false
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
+        enum: ["baseball", "basketball", "boxing", "cycling", "fitness", "golf", "running", "swimming", "tennis", "triathlon", "volleyball"]
     },
     age: {
         type: String,
         required: true,
         enum: ["children", "youth", "young adults", "adults"]
     },
-    role: {
+    weekSchedule: {
+        type: Date,
+        required: true
+    },
+    duration: {
         type: String,
-        default: "user"
+        required: true
     },
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
-    token: {
+    description: {
         type: String,
+        required: true
     },
-    enrolled: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Termin', default: [] }]
+    players: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User',
+            default: []
+        }
+    ],
 }, { timestamps: true });
-const User = mongoose_1.default.model("User", UserSchema);
-exports.default = User;
-//# sourceMappingURL=sport.js.map
+// Validation for players array size
+TerminSchema.path('players').validate(function (value) {
+    if (value.length > 10) {
+        throw new Error("Class cannot have more than 10 players.");
+    }
+});
+const Termin = mongoose_1.default.model("Termin", TerminSchema);
+exports.default = Termin;
+//# sourceMappingURL=sportClass.js.map
