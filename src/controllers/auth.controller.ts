@@ -25,7 +25,7 @@ export async function signup(req:any, res:any) {
     })
 
 
-
+    //data for sending email
     let transport = nodemailer.createTransport({
         host: "smtp.mailtrap.io",
         port: 2525,
@@ -45,7 +45,7 @@ export async function signup(req:any, res:any) {
         let newUser = await user.save()
 
         //generateJWT token
-        const token = generateToken(newUser.name, newUser.email, newUser._id)
+        const token = generateToken(newUser.name, newUser.email, newUser._id, newUser.role, newUser.enrolled, newUser.age)
 
         //reading html and adding variables in it
         const readFile = promisify(fs.readFile);
@@ -77,12 +77,14 @@ export async function signup(req:any, res:any) {
 }
 
 export async function confirmRegistration(req:any, res:any) {
+
     const tokenToCheck:string = req.query.token;
 
     try {
         const userData:any = decodeToken(tokenToCheck)
         const currentUser:any = await User.findOne({name: userData.name, email: userData.email})
 
+        // set verified to true after decoding jwt and finding user
         if (userData && !currentUser.isVerified){
             const verifiedUser = await User.updateOne({name: userData.name, email: userData.email}, {$set: {isVerified:true}})
             res.status(200).json({message: "User is now verified"})
@@ -109,18 +111,18 @@ export async function loginUser(req: any, res: any) {
         }
 
         // Validate if user exist in our database
-        let user = (await User.findOne({ email }));
+        let user = (await User.findOne({ email }).select("+password"));
 
         if (user && (await bcrypt.compare(password, user.password))) {
 
             // Create token
-            const token = generateToken(user.name, req.body.email, user._id)
+            const token = generateToken(user.name, req.body.email, user._id, user.role, user.enrolled, user.age)
 
             // save user token
             user.token = token;
 
             // user
-            res.status(200).json(user);
+            res.status(200).json({token: user.token});
         }else {
 
             res.status(400).send("Invalid Credentials");

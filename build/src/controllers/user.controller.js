@@ -62,11 +62,12 @@ function getAllUsers(req, res) {
             const startIndex = (page - 1) * limit;
             const endIndex = page * limit;
             const pagedUsers = listOfUsers.slice(startIndex, endIndex);
+            const totalPages = Math.ceil(listOfUsers.length / limit);
             if (pagedUsers.length === 0) {
                 res.status(200).json(listOfUsers);
             }
             else {
-                res.status(200).json(pagedUsers);
+                res.status(200).json([{ pagedUsers }, { totalPages: totalPages }]);
             }
         }
         catch (e) {
@@ -84,7 +85,7 @@ function editUser(req, res) {
                 const hashedPassword = yield bcrypt_1.default.hash(data.password, 10);
                 data.password = hashedPassword;
             }
-            let currentUser = yield user_1.default.updateOne({ _id: req.params.id }, { $set: data });
+            let currentUser = yield user_1.default.updateOne({ _id: req.params.id }, { $set: data }, { runValidators: true });
             res.status(200).json(currentUser);
         }
         catch (e) {
@@ -102,7 +103,7 @@ function deleteUser(req, res) {
                     res.status(404).json({ message: "User with this id does not exist." });
                 }
                 else {
-                    let currentUser = yield user_1.default.deleteOne({ _id: req.params.id });
+                    yield user_1.default.deleteOne({ _id: req.params.id });
                     res.status(200).json({ message: "User deleted successfully." });
                 }
             }

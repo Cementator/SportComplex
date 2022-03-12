@@ -35,7 +35,31 @@ const TerminSchema = new mongoose.Schema({
             ref: 'User',
             default: []
         }],
-    },
+
+    comments:[
+        {
+            text: {type:String},
+
+    }],
+
+    ratings:[
+        {
+            rating: {type:Number,
+                min:1,
+                max:5
+            },
+            byUser:{
+                type: String
+
+            }
+    }],
+
+    averageRating: {
+        type:Number,
+        default: null
+    }
+
+},
 
     {timestamps:true}
 )

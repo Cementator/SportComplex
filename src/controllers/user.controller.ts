@@ -64,13 +64,14 @@ export async function getAllUsers(req:any, res:any){
         const endIndex:number = page * limit
 
         const pagedUsers:any = listOfUsers.slice(startIndex, endIndex)
+        const totalPages:number = Math.ceil(listOfUsers.length / limit)
 
 
         if(pagedUsers.length === 0){
             res.status(200).json(listOfUsers)
 
         }else {
-            res.status(200).json(pagedUsers)
+            res.status(200).json([{pagedUsers}, {totalPages: totalPages}])
         }
 
 
@@ -93,7 +94,7 @@ export async function editUser(req:any, res:any){
             data.password = hashedPassword
         }
 
-        let currentUser:any = await User.updateOne({_id: req.params.id}, {$set: data})
+        let currentUser:any = await User.updateOne({_id: req.params.id}, {$set: data}, { runValidators: true })
 
         res.status(200).json(currentUser)
 
@@ -112,11 +113,11 @@ export async function deleteUser(req:any, res:any){
             const user:any = await User.findOne({_id: req.params.id})
 
 
-            if(user=== null){
+            if(user === null){
                 res.status(404).json({message: "User with this id does not exist."})
 
             }else {
-                let currentUser:any = await User.deleteOne({_id: req.params.id})
+                await User.deleteOne({_id: req.params.id})
 
                 res.status(200).json({message: "User deleted successfully."})
             }

@@ -32,6 +32,7 @@ function signup(req, res) {
             email: req.body.email,
             age: req.body.age
         });
+        //data for sending email
         let transport = nodemailer_1.default.createTransport({
             host: "smtp.mailtrap.io",
             port: 2525,
@@ -47,7 +48,7 @@ function signup(req, res) {
             //saving new user to database
             let newUser = yield user.save();
             //generateJWT token
-            const token = (0, generateToken_1.default)(newUser.name, newUser.email, newUser._id);
+            const token = (0, generateToken_1.default)(newUser.name, newUser.email, newUser._id, newUser.role, newUser.enrolled, newUser.age);
             //reading html and adding variables in it
             const readFile = (0, util_1.promisify)(fs_1.default.readFile);
             let html = yield readFile('./src/views/registerEmail.html', 'utf8');
@@ -80,6 +81,7 @@ function confirmRegistration(req, res) {
         try {
             const userData = (0, decodeToken_1.default)(tokenToCheck);
             const currentUser = yield user_1.default.findOne({ name: userData.name, email: userData.email });
+            // set verified to true after decoding jwt and finding user
             if (userData && !currentUser.isVerified) {
                 const verifiedUser = yield user_1.default.updateOne({ name: userData.name, email: userData.email }, { $set: { isVerified: true } });
                 res.status(200).json({ message: "User is now verified" });
@@ -104,14 +106,14 @@ function loginUser(req, res) {
                 res.status(400).send("All input is required");
             }
             // Validate if user exist in our database
-            let user = (yield user_1.default.findOne({ email }));
+            let user = (yield user_1.default.findOne({ email }).select("+password"));
             if (user && (yield bcrypt_1.default.compare(password, user.password))) {
                 // Create token
-                const token = (0, generateToken_1.default)(user.name, req.body.email, user._id);
+                const token = (0, generateToken_1.default)(user.name, req.body.email, user._id, user.role, user.enrolled, user.age);
                 // save user token
                 user.token = token;
                 // user
-                res.status(200).json(user);
+                res.status(200).json({ token: user.token });
             }
             else {
                 res.status(400).send("Invalid Credentials");

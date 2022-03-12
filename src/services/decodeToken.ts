@@ -2,7 +2,7 @@ import { verify } from 'jsonwebtoken';
 import 'dotenv/config'
 
 
-export default function decodeToken(token:string) {
+export default function decodeToken(token:string | undefined) {
     const jwtToken = token
     if(jwtToken){
         try {

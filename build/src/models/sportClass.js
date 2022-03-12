@@ -50,6 +50,26 @@ const TerminSchema = new mongoose_1.default.Schema({
             default: []
         }
     ],
+    comments: [
+        {
+            text: { type: String },
+        }
+    ],
+    ratings: [
+        {
+            rating: { type: Number,
+                min: 1,
+                max: 5
+            },
+            byUser: {
+                type: String
+            }
+        }
+    ],
+    averageRating: {
+        type: Number,
+        default: null
+    }
 }, { timestamps: true });
 // Validation for players array size
 TerminSchema.path('players').validate(function (value) {

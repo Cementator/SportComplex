@@ -5,12 +5,15 @@ require("dotenv/config");
 /**
  * generates JWT used for local testing
  */
-function generateToken(name, email, id) {
+function generateToken(name, email, id, role, enrolled, age) {
     // information to be encoded in the JWT
     const payload = {
         name: name,
         email: email,
-        id: id
+        id: id,
+        role: role,
+        enrolled: enrolled,
+        age: age
     };
     const signInOptions = {
         algorithm: 'HS256',
